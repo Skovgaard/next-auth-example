@@ -8,8 +8,8 @@ const getCsrfTokenPromise = getCsrfToken();
 export default function SignIn() {
   const csrfToken = use(getCsrfTokenPromise);
 
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [username, setUsername] = useState<string>("test");
+  const [password, setPassword] = useState<string>("test");
 
   return (
     <>

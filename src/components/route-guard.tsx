@@ -9,9 +9,12 @@ export default function RouteGuard({
 }: {
   children: JSX.Element;
 }): JSX.Element {
-  const { status } = useSession();
+  const { status, data: session } = useSession();
   const pathname = usePathname();
   const router = useRouter();
+
+  console.log("gogogogogo");
+  
 
   useEffect(() => {
     if (status === "authenticated" && pathname !== "/") router.push("/");
@@ -19,7 +22,14 @@ export default function RouteGuard({
       router.push("/auth/signin");
   }, [pathname, router, status]);
 
-  if (status !== "authenticated" ) return <div>Loading..</div>;
+  useEffect(() => {
+    if (session?.error === "RefreshAccessTokenError") {
+      router.push("/auth/signin"); // Force sign in to hopefully resolve error
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
+
+  if (status !== "authenticated") return <div>Loading..</div>;
 
   return children;
 }
